@@ -13,6 +13,7 @@ namespace PropertiesShower.ViewModels
     {
         private UIDocument uidoc;
         private Window window;
+        private Element selectedElement;
         public PropertiesViewModel(Element selectedElement, UIDocument uidoc, Window window)
         {
             this.uidoc = uidoc;
@@ -22,14 +23,14 @@ namespace PropertiesShower.ViewModels
             propertiesPageViewModel = new PropertiesPageViewModel(new PropertyModel(selectedElement));
             PropertiesPage.DataContext = propertiesPageViewModel;
         }
-        private Element selectedElement;
+
         public Element SelectedElement
         {
             get => selectedElement;
             set
             {
                 selectedElement = value;
-                OnPropertyChanged(nameof(SelectedElement));
+                OnPropertyChanged();
                 UpdatePropertiesPageViewModel();
             }
         }
@@ -39,9 +40,9 @@ namespace PropertiesShower.ViewModels
 
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string prop = "")
+        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         private void UpdatePropertiesPageViewModel()
         {
