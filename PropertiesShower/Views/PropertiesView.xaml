@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PropertiesShower.Views"
         mc:Ignorable="d"
-        Title="PropertiesView" Height="450" Width="800">
+        Title="PropertiesView" Height="800" Width="500">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <Frame Grid.Row="0" Content="{Binding PropertiesPage }" Margin="5"/>
+        <Button Grid.Row="1" Content="Выбрать другой элемент" Width="200" Padding="5" Margin="5" Command="{Binding SelectAnotherElementCommand}"/>
     </Grid>
 </Window>

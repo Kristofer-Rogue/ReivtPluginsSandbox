@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Assembly>PropertiesShower.dll</Assembly>
+    <AddInId>5716DBC0-528A-4568-B000-D670F6F14EFC</AddInId>
+    <FullClassName>PropertiesShower.App</FullClassName>
+    <Name>Properties Shower plugin</Name>
+    <VendorId>Kristofer Rogue</VendorId>
+    <VendorDescription>Autodesk, www.autodesk.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>
