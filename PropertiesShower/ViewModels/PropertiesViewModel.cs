@@ -1,17 +1,25 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Selection;
+using PropertiesShower.Models;
 using PropertiesShower.Views;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace PropertiesShower.ViewModels
 {
     internal class PropertiesViewModel : INotifyPropertyChanged
     {
-        public PropertiesViewModel(Element selectedElement)
+        private UIDocument uidoc;
+        private Window window;
+        public PropertiesViewModel(Element selectedElement, UIDocument uidoc, Window window)
         {
-            SelectedElement = selectedElement;
-            propertiesPageViewModel = new PropertiesPageViewModel(selectedElement);
+            this.uidoc = uidoc;
+            this.window = window;
             PropertiesPage = new PropertiesPage();
+            SelectedElement = selectedElement;
+            propertiesPageViewModel = new PropertiesPageViewModel(new PropertyModel(selectedElement));
             PropertiesPage.DataContext = propertiesPageViewModel;
         }
         private Element selectedElement;
@@ -22,6 +30,7 @@ namespace PropertiesShower.ViewModels
             {
                 selectedElement = value;
                 OnPropertyChanged(nameof(SelectedElement));
+                UpdatePropertiesPageViewModel();
             }
         }
 
@@ -32,11 +41,37 @@ namespace PropertiesShower.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+        private void UpdatePropertiesPageViewModel()
+        {
+            propertiesPageViewModel = new PropertiesPageViewModel(new PropertyModel(selectedElement));
+            PropertiesPage.DataContext = propertiesPageViewModel;
+        }
+        public Models.RelayCommand SelectAnotherElementCommand
+        {
+            get
+            {
+                return new RelayCommand(obj =>
+                {
+                    var doc = uidoc.Document;
+                    var choices = uidoc.Selection;
+                    var hasPickOne = choices.PickObject(ObjectType.Element, "Выберите элемент");
 
-        //public RelayCommand SelectAnotherElementCommand
+                    if (hasPickOne == null)
+                    {
+                        return;
+                    }
+
+                    SelectedElement = doc.GetElement(hasPickOne);
+                    window.WindowState = WindowState.Normal;
+                    window.Focus();
+                });
+
+
+            }
+        }
     }
 }
+
 

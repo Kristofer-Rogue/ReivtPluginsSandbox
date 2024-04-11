@@ -2,10 +2,8 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
-using System.Linq;
-using System.Text;
-using PropertiesShower.Views;
 using PropertiesShower.ViewModels;
+using PropertiesShower.Views;
 
 namespace PropertiesShower.Commands
 {
@@ -27,13 +25,12 @@ namespace PropertiesShower.Commands
 
             var selectedElement = doc.GetElement(hasPickOne.ElementId);
 
-            var viewModel = new PropertiesViewModel(selectedElement);
-            var view = new PropertiesView
-            {
-                DataContext = viewModel,
-                WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen
-            };
-            view.ShowDialog();
+            var view = new PropertiesView();
+            var viewModel = new PropertiesViewModel(selectedElement, uidoc, view);
+            view.DataContext = viewModel;
+            view.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+
+            view.Show();
 
             return Result.Succeeded;
         }
